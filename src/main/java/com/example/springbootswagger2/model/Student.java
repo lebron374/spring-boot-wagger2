@@ -23,6 +23,10 @@ public class Student {
 	@ApiModelProperty(notes = "Country of the Student",name="country",required=true,value="国家")
 	private String country;
 
+	public Student(){
+
+	}
+
 	public Student(String name, String cls, String country) {
 		super();
 		this.name = name;

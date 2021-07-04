@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -93,14 +94,25 @@ public class Swagger2RestController {
      * @return
      */
 	@ApiOperation(value = "获取指定班级的学生",responseContainer="List", response = Student.class,tags="getStudentByClass")
-    @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Suceess|OK"),
-            @ApiResponse(code = 401, message = "not authorized!"),
-            @ApiResponse(code = 403, message = "forbidden!!!"),
-            @ApiResponse(code = 404, message = "not found!!!") })
+	@ApiResponses(value = {
+			@ApiResponse(code = 200, message = "Suceess|OK"),
+			@ApiResponse(code = 401, message = "not authorized!"),
+			@ApiResponse(code = 403, message = "forbidden!!!"),
+			@ApiResponse(code = 404, message = "not found!!!") })
 	@RequestMapping(value = "/getStudentByClass/{cls}", method = RequestMethod.GET)
 	public List<Student> getStudentByClass(@PathVariable(value = "cls") String cls) {
 		return students.stream().filter(x -> x.getCls().equalsIgnoreCase(cls)).collect(Collectors.toList());
 	}
 
+
+    @ApiOperation(value = "添加学生", tags="addStudent")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Suceess|OK"),
+            @ApiResponse(code = 401, message = "not authorized!"),
+            @ApiResponse(code = 403, message = "forbidden!!!"),
+            @ApiResponse(code = 404, message = "not found!!!") })
+    @RequestMapping(value = "/addStudent", method = RequestMethod.POST, consumes = {"application/json"}, produces = {"application/json"})
+    public Boolean addStudent(@RequestBody Student student) {
+        return students.add(student);
+    }
 }
