@@ -1,6 +1,7 @@
 package com.example.springbootswagger2.configuration;
 
 import com.github.xiaoymin.swaggerbootstrapui.annotations.EnableSwaggerBootstrapUI;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
@@ -32,10 +33,14 @@ import java.util.List;
 @EnableSwaggerBootstrapUI
 @Profile({"dev", "pre", "prod"})
 public class Swagger2UiConfiguration extends WebMvcConfigurerAdapter  {
+
+    @Value("${swagger2.enable}")
+    private boolean swagger2Enable;
+
 	@Bean
 	public Docket api() {
 		return new Docket(DocumentationType.SWAGGER_2)
-                .enable(true)
+                .enable(swagger2Enable)
                 // 绑定swagger-ui的展示内容
 				.apiInfo(apiInfo())
 				.select()
@@ -45,6 +50,23 @@ public class Swagger2UiConfiguration extends WebMvcConfigurerAdapter  {
                 .securitySchemes(securitySchemes())
                 .securityContexts(securityContexts());
 	}
+
+    private List<SecurityScheme> securitySchemes() {
+        List<SecurityScheme> list = new ArrayList<>();
+        list.add(new BasicAuth("basicAuth"));
+        list.add(new ApiKey("write_token","write_token","header"));
+        list.add(new ApiKey("read_token","read_token","query"));
+
+        return list;
+    }
+
+    private List<SecurityContext> securityContexts() {
+        return Arrays.asList(SecurityContext.builder()
+                .securityReferences(defaultAuth())
+                .forPaths(PathSelectors.any())
+                .build()
+        );
+    }
 	
 	@Override
 	public void addResourceHandlers(ResourceHandlerRegistry registry) {
@@ -62,23 +84,6 @@ public class Swagger2UiConfiguration extends WebMvcConfigurerAdapter  {
                 .description("swagger的API文档演示效果")
 				.version("1.0")
                 .build();
-	}
-
-	private List<SecurityScheme> securitySchemes() {
-        List<SecurityScheme> list = new ArrayList<>();
-        list.add(new BasicAuth("basicAuth"));
-        list.add(new ApiKey("write_token","write_token","header"));
-        list.add(new ApiKey("read_token","read_token","query"));
-
-        return list;
-	}
-
-	private List<SecurityContext> securityContexts() {
-		return Arrays.asList(SecurityContext.builder()
-                .securityReferences(defaultAuth())
-                .forPaths(PathSelectors.any())
-                .build()
-		);
 	}
 
 	List<SecurityReference> defaultAuth() {

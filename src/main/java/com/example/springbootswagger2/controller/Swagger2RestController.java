@@ -46,8 +46,7 @@ public class Swagger2RestController {
 			responseContainer="List",
 			response = Student.class,
             tags = "getStudents",
-            authorizations = {@Authorization(value="read_token"),
-                    @Authorization(value = "basicAuth")})
+            authorizations = {@Authorization(value = "basicAuth")})
 	@ApiResponses(value = { 
 			@ApiResponse(code = 200, message = "Suceess|OK"),
 			@ApiResponse(code = 401, message = "not authorized!"), 
