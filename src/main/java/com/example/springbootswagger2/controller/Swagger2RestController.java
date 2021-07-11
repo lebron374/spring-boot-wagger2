@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiParam;
+import io.swagger.annotations.Authorization;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,7 +22,8 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 
-@Api(value = "Swagger2RestController", description = "REST Apis related to Student Entity!!!!")
+@Api(value = "Swagger2RestController",
+        description = "REST Apis related to Student Entity!!!!")
 @RestController
 public class Swagger2RestController {
 
@@ -40,7 +42,11 @@ public class Swagger2RestController {
      *
      * @return
      */
-	@ApiOperation(value = "以列表形式返回学生信息", responseContainer="List", response = Student.class, tags = "getStudents")
+	@ApiOperation(value = "以列表形式返回学生信息",
+			responseContainer="List",
+			response = Student.class,
+            tags = "getStudents",
+            authorizations = {@Authorization(value="read_token")})
 	@ApiResponses(value = { 
 			@ApiResponse(code = 200, message = "Suceess|OK"),
 			@ApiResponse(code = 401, message = "not authorized!"), 
@@ -57,7 +63,10 @@ public class Swagger2RestController {
      * @param name
      * @return
      */
-	@ApiOperation(value = "获取指定名字的学生", response = Student.class, tags = "getStudentByName")
+	@ApiOperation(value = "获取指定名字的学生",
+            response = Student.class,
+            tags = "getStudentByName",
+            authorizations = {@Authorization(value="read_token")})
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Suceess|OK"),
             @ApiResponse(code = 401, message = "not authorized!"),
@@ -74,7 +83,11 @@ public class Swagger2RestController {
      * @param country
      * @return
      */
-	@ApiOperation(value = "获取指定国家的学生", responseContainer="List", response = Student.class, tags = "getStudentByCountry")
+	@ApiOperation(value = "获取指定国家的学生",
+            responseContainer="List",
+            response = Student.class,
+            tags = "getStudentByCountry",
+            authorizations = {@Authorization(value="read_token")})
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Suceess|OK"),
             @ApiResponse(code = 401, message = "not authorized!"),
@@ -95,7 +108,11 @@ public class Swagger2RestController {
      * @param cls
      * @return
      */
-	@ApiOperation(value = "获取指定班级的学生",responseContainer="List", response = Student.class,tags="getStudentByClass")
+	@ApiOperation(value = "获取指定班级的学生",
+            responseContainer="List",
+            response = Student.class,
+            tags="getStudentByClass",
+            authorizations = {@Authorization(value="read_token")})
 	@ApiResponses(value = {
 			@ApiResponse(code = 200, message = "Suceess|OK"),
 			@ApiResponse(code = 401, message = "not authorized!"),
@@ -107,7 +124,9 @@ public class Swagger2RestController {
 	}
 
 
-    @ApiOperation(value = "添加学生", tags="addStudent")
+    @ApiOperation(value = "添加学生",
+            tags="addStudent",
+            authorizations = {@Authorization(value="write_token")})
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Suceess|OK"),
             @ApiResponse(code = 401, message = "not authorized!"),
