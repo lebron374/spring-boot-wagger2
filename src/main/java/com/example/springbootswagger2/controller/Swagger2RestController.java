@@ -6,10 +6,12 @@ import java.util.stream.Collectors;
 
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiParam;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.springbootswagger2.model.Student;
@@ -62,7 +64,7 @@ public class Swagger2RestController {
             @ApiResponse(code = 403, message = "forbidden!!!"),
             @ApiResponse(code = 404, message = "not found!!!") })
 	@RequestMapping(value = "/getStudent/{studentName}", method = RequestMethod.GET)
-	public Student getStudentByName(@PathVariable(value = "studentName") String name) {
+	public Student getStudentByName(@RequestParam @ApiParam(value = "studentName") String name) {
 		return students.stream().filter(x -> x.getName().equalsIgnoreCase(name)).collect(Collectors.toList()).get(0);
 	}
 
@@ -112,7 +114,7 @@ public class Swagger2RestController {
             @ApiResponse(code = 403, message = "forbidden!!!"),
             @ApiResponse(code = 404, message = "not found!!!") })
     @RequestMapping(value = "/addStudent", method = RequestMethod.POST, consumes = {"application/json"}, produces = {"application/json"})
-    public Boolean addStudent(@RequestBody Student student) {
+    public Boolean addStudent(@RequestBody @ApiParam(value = "student") Student student) {
         return students.add(student);
     }
 }
