@@ -66,7 +66,7 @@ public class Swagger2UiConfiguration extends WebMvcConfigurerAdapter  {
 
 	private List<SecurityScheme> securitySchemes() {
         List<SecurityScheme> list = new ArrayList<>();
-//        list.add(new BasicAuth("basicAuth"));
+        list.add(new BasicAuth("basicAuth"));
         list.add(new ApiKey("write_token","write_token","header"));
         list.add(new ApiKey("read_token","read_token","query"));
 

@@ -23,7 +23,7 @@ import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 
 @Api(value = "Swagger2RestController",
-        description = "REST Apis related to Student Entity!!!!")
+        description = "学生服务")
 @RestController
 public class Swagger2RestController {
 
@@ -46,7 +46,8 @@ public class Swagger2RestController {
 			responseContainer="List",
 			response = Student.class,
             tags = "getStudents",
-            authorizations = {@Authorization(value="read_token")})
+            authorizations = {@Authorization(value="read_token"),
+                    @Authorization(value = "basicAuth")})
 	@ApiResponses(value = { 
 			@ApiResponse(code = 200, message = "Suceess|OK"),
 			@ApiResponse(code = 401, message = "not authorized!"), 
