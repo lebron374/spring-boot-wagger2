@@ -31,7 +31,7 @@ import java.util.List;
 @Configuration
 @EnableSwagger2
 @EnableSwaggerBootstrapUI
-@Profile({"dev", "pre", "prod"})
+//@Profile({"dev", "test", "pre", "prod"})
 public class Swagger2UiConfiguration extends WebMvcConfigurerAdapter  {
 
     @Value("${swagger2.enable}")
@@ -46,9 +46,9 @@ public class Swagger2UiConfiguration extends WebMvcConfigurerAdapter  {
 				.select()
                 // 绑定扫描的类
 				.apis(Predicates.not(RequestHandlerSelectors.basePackage("org.springframework.boot")))
-				.build()
-                .securitySchemes(securitySchemes())
-                .securityContexts(securityContexts());
+				.build();
+//                .securitySchemes(securitySchemes())
+//                .securityContexts(securityContexts());
 	}
 
     private List<SecurityScheme> securitySchemes() {
