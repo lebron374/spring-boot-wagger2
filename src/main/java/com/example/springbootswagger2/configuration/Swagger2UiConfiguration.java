@@ -31,7 +31,7 @@ import java.util.List;
 @Configuration
 @EnableSwagger2
 @EnableSwaggerBootstrapUI
-//@Profile({"dev", "test", "pre", "prod"})
+@Profile({"dev", "test", "pre", "prod"})
 public class Swagger2UiConfiguration extends WebMvcConfigurerAdapter  {
 
     @Value("${swagger2.enable}")
@@ -51,28 +51,6 @@ public class Swagger2UiConfiguration extends WebMvcConfigurerAdapter  {
 //                .securityContexts(securityContexts());
 	}
 
-    private List<SecurityScheme> securitySchemes() {
-        List<SecurityScheme> list = new ArrayList<>();
-        list.add(new BasicAuth("basicAuth"));
-        list.add(new ApiKey("write_token","write_token","header"));
-        list.add(new ApiKey("read_token","read_token","query"));
-
-        return list;
-    }
-
-    private List<SecurityContext> securityContexts() {
-        return Arrays.asList(SecurityContext.builder()
-                .securityReferences(defaultAuth())
-                .forPaths(PathSelectors.any())
-                .build()
-        );
-    }
-	
-	@Override
-	public void addResourceHandlers(ResourceHandlerRegistry registry) {
-		registry.addResourceHandler("swagger-ui.html").addResourceLocations("classpath:/META-INF/resources/");
-		registry.addResourceHandler("/webjars/**").addResourceLocations("classpath:/META-INF/resources/webjars/");
-	}
 
     /**
      * 指定swagger2 ui的显示格式
@@ -86,10 +64,35 @@ public class Swagger2UiConfiguration extends WebMvcConfigurerAdapter  {
                 .build();
 	}
 
+    @Override
+    public void addResourceHandlers(ResourceHandlerRegistry registry) {
+        registry.addResourceHandler("swagger-ui.html").addResourceLocations("classpath:/META-INF/resources/");
+        registry.addResourceHandler("/webjars/**").addResourceLocations("classpath:/META-INF/resources/webjars/");
+    }
+
 	List<SecurityReference> defaultAuth() {
 		AuthorizationScope authorizationScope = new AuthorizationScope("global","accessEverything");
 		AuthorizationScope[] authorizationScopes = new AuthorizationScope[1];
 		authorizationScopes[0] = authorizationScope;
 		return Arrays.asList(new SecurityReference("Authorization", authorizationScopes));
 	}
+
+
+	private List<SecurityScheme> securitySchemes() {
+		List<SecurityScheme> list = new ArrayList<>();
+		list.add(new BasicAuth("basicAuth"));
+		list.add(new ApiKey("write_token","write_token","header"));
+		list.add(new ApiKey("read_token","read_token","query"));
+
+		return list;
+	}
+
+	private List<SecurityContext> securityContexts() {
+		return Arrays.asList(SecurityContext.builder()
+				.securityReferences(defaultAuth())
+				.forPaths(PathSelectors.any())
+				.build()
+		);
+	}
+
 }

@@ -42,13 +42,13 @@ public class Swagger2RestController {
      *
      * @return
      */
-	@ApiOperation(value = "以列表形式返回学生信息",
+    @ApiOperation(value = "以列表形式返回学生信息",
 			responseContainer="List",
 			response = Student.class,
             tags = "getStudents")
-	@ApiResponses(value = { 
+    @ApiResponses(value = {
 			@ApiResponse(code = 200, message = "Suceess|OK"),
-			@ApiResponse(code = 401, message = "not authorized!"), 
+			@ApiResponse(code = 401, message = "not authorized!"),
 			@ApiResponse(code = 403, message = "forbidden!!!"),
 			@ApiResponse(code = 404, message = "not found!!!") })
 	@RequestMapping(value = "/getStudents", method = RequestMethod.GET)
@@ -128,7 +128,27 @@ public class Swagger2RestController {
             @ApiResponse(code = 403, message = "forbidden!!!"),
             @ApiResponse(code = 404, message = "not found!!!") })
     @RequestMapping(value = "/addStudent", method = RequestMethod.POST, consumes = {"application/json"}, produces = {"application/json"})
-    public Boolean addStudent(@RequestBody @ApiParam(value = "student") Student student) {
+    public Boolean addStudent(@ApiParam(value = "student") @RequestBody Student student) {
+        return students.add(student);
+    }
+
+    @ApiOperation(value = "添加学生V2",
+            tags="addStudentV2")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "name", value = "姓名", paramType = "query"),
+            @ApiImplicitParam(name = "cls", value = "班级", paramType = "query"),
+            @ApiImplicitParam(name = "country", value = "国家", paramType = "query")
+    })
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Suceess|OK"),
+            @ApiResponse(code = 401, message = "not authorized!"),
+            @ApiResponse(code = 403, message = "forbidden!!!"),
+            @ApiResponse(code = 404, message = "not found!!!") })
+    @RequestMapping(value = "/addStudentV2", method = RequestMethod.GET)
+    public Boolean addStudentV2(@RequestParam String name,
+                                @RequestParam String cls,
+                                @RequestParam String country) {
+	    Student student = new Student(name, cls, country);
         return students.add(student);
     }
 
@@ -143,5 +163,26 @@ public class Swagger2RestController {
 	    return students.stream()
                 .filter(x -> x.getCls().equals(cls) && x.getName().equalsIgnoreCase(name))
                 .collect(Collectors.toList()).get(0);
+    }
+
+    @ApiOperation(value = "删除指定名字的学生", tags = "delStudentByName")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Suceess|OK"),
+            @ApiResponse(code = 401, message = "not authorized!"),
+            @ApiResponse(code = 403, message = "forbidden!!!"),
+            @ApiResponse(code = 404, message = "not found!!!") })
+    @RequestMapping(value = "delStudentByName", method = RequestMethod.GET)
+    public Student delStudentByName(@RequestParam String name) {
+	    Student tempStudent = null;
+        for (Student student : students) {
+            if (student.getName().equalsIgnoreCase(name)) {
+                tempStudent = student;
+                break;
+            }
+        }
+
+        students.remove(tempStudent);
+
+        return tempStudent;
     }
 }
